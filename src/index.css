@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: #fff2e5;
+}
+
+@font-face {
+  font-family: "IBMPlexSans";
+  src: url("/public/fonts/IBM_Plex_Sans/IBMPlexSans-Light.ttf");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "IBMPlexSans";
+  src: url("/public/fonts/IBM_Plex_Sans/IBMPlexSans-ExtraLight.ttf");
+  font-weight: 100;
+}
