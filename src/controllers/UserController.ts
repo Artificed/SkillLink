@@ -1,26 +1,45 @@
-import { createUserInDB, updateUserInDB, deleteUserInDB, getUserFromDB, addCourseToStudent } from "../models/user";
-import { User } from "../models/user";
+import { createUserInDB, updateUserInDB, deleteUserInDB, getUserFromDB, addCourseToStudent } from "../models/User";
+import { User } from "../models/User";
 import { DocumentData } from "firebase/firestore";
+import { createUserWithEmailAndPassword, Auth, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebase";
+import { getFirebaseErrorMessage } from "../utils/FirebaseError";
 
-// Fungsi untuk membuat user baru
 export const createUser = async (
-  userId: string,
-  userData: Omit<User, "userId" | "createdAt">, // Menghilangkan userId dan createdAt dari parameter
+  userData: { email: string; password: string },
   onSuccess: () => void,
   onError: (error: string) => void
 ) => {
   try {
-    await createUserInDB(userId, userData);
+    const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
     onSuccess();
   } catch (error) {
-    onError("Failed to create user");
+    const errorCode = (error as any).code;
+    const errorMessage = getFirebaseErrorMessage(errorCode);
+    onError(errorMessage);
   }
 };
 
-// Fungsi untuk memperbarui data user
+export const signIn = async (
+  email: string,
+  password: string,
+  onSuccess: () => void,
+  onError: (error: string) => void
+) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    onSuccess();
+  } catch (error) {
+    const errorCode = (error as any).code;
+    const errorMessage = getFirebaseErrorMessage(errorCode);
+    onError(errorMessage);
+  }
+};
+  
+
 export const updateUser = async (
   userId: string,
-  userData: Partial<Omit<User, "userId" | "createdAt">>, // Partial memungkinkan beberapa field kosong
+  userData: Partial<Omit<User, "userId" | "createdAt">>,
   onSuccess: () => void,
   onError: (error: string) => void
 ) => {
@@ -32,7 +51,6 @@ export const updateUser = async (
   }
 };
 
-// Fungsi untuk menghapus user
 export const deleteUser = async (
   userId: string,
   onSuccess: () => void,
@@ -46,7 +64,6 @@ export const deleteUser = async (
   }
 };
 
-// Fungsi untuk mengambil data user
 export const getUser = async (
   userId: string,
   onSuccess: (data: DocumentData | undefined) => void,
@@ -64,7 +81,6 @@ export const getUser = async (
   }
 };
 
-// Fungsi untuk mendaftarkan student ke course (enroll)
 export const enrollCourse = async (
   userId: string,
   courseData: { title: string; description: string; progress: number },
@@ -78,3 +94,4 @@ export const enrollCourse = async (
     onError("Failed to enroll in course");
   }
 };
+

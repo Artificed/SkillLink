@@ -26,19 +26,18 @@ export const createUserInDB = async (userId: string, userData: Omit<User, "userI
   });
 };
 
-// Fungsi untuk memperbarui user
+
 export const updateUserInDB = async (userId: string, userData: Partial<Omit<User, "userId" | "createdAt">>) => {
   const userRef = doc(db, "users", userId);
   await updateDoc(userRef, userData);
 };
 
-// Fungsi untuk menghapus user
+
 export const deleteUserInDB = async (userId: string) => {
   const userRef = doc(db, "users", userId);
   await deleteDoc(userRef);
 };
 
-// Fungsi untuk mengambil data user dari Firestore
 export const getUserFromDB = async (userId: string): Promise<User | undefined> => {
   const userRef = doc(db, "users", userId);
   const docSnap = await getDoc(userRef);
@@ -48,7 +47,7 @@ export const getUserFromDB = async (userId: string): Promise<User | undefined> =
   return undefined;
 };
 
-// Fungsi untuk menambahkan course yang diikuti student
+
 export const addCourseToStudent = async (userId: string, courseData: { title: string; description: string; progress: number }) => {
   const enrolledCoursesCollection = collection(db, `users/${userId}/enrolledCourses`);
   await addDoc(enrolledCoursesCollection, {

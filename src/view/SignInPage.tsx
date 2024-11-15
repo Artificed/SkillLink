@@ -3,8 +3,10 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface SignInFormProps {
-  // Add your sign in function prop here
-  signIn?: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string,
+    onSuccess: () => void,
+    onError: (error: string) => void
+  ) => Promise<void>;
 }
 
 const SignInPage = ({ signIn }: SignInFormProps) => {
@@ -28,8 +30,13 @@ const SignInPage = ({ signIn }: SignInFormProps) => {
     if (signIn) {
       setLoading(true);
       try {
-        await signIn(formData.email, formData.password);
-        navigate('/dashboard');
+        console.log("tes")
+        await signIn(
+          formData.email, 
+          formData.password, 
+          () => navigate('/dashboard'), 
+          (errorMsg) => setError(errorMsg)
+        );
       } catch (error) {
         setError('Invalid email or password');
       } finally {
