@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Phone, Lock, User as UserIcon } from 'lucide-react';
-import { User } from '../models/user';
+import { User } from '../models/User';
+import { Link } from 'react-router-dom';
 
 
 // Type untuk data yang dikirim ke createUser (tanpa userId dan createdAt)
@@ -8,7 +9,6 @@ type CreateUserData = Omit<User, 'userId' | 'createdAt'>;
 
 interface SignUpFormProps {
   createUser: (
-    userId: string,
     userData: Omit<User, 'userId' | 'createdAt'>,
     onSuccess: () => void,
     onError: (error: string) => void
@@ -43,7 +43,6 @@ const SignUpPage = ({ createUser }: SignUpFormProps) => {
 
     try {
       await createUser(
-        userId,
         formData,
         () => {
           setLoading(false);
@@ -110,7 +109,7 @@ const SignUpPage = ({ createUser }: SignUpFormProps) => {
 
         {/* Right side - Form */}
         <div className="w-full lg:w-1/2 max-w-md">
-          <h1 className="text-4xl font-bold mb-8 text-gray-800">Create Account</h1>
+          <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">Create Account</h1>
           
           {error && (
             <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
@@ -230,9 +229,7 @@ const SignUpPage = ({ createUser }: SignUpFormProps) => {
               <div className="text-gray-400">- or -</div>
               <p className="text-gray-600">
                 Already have an account?{' '}
-                <a href="#" className="text-[#b17551] hover:underline">
-                  Sign in
-                </a>
+                <Link to="/signin" className="text-[#b17551] hover:underline">Sign in</Link>
               </p>
             </div>
           </form>
